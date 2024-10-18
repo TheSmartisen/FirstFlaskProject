@@ -1,108 +1,75 @@
+# Gestion d'utilisateurs - Web Application
 
-# Application Web de Gestion des Utilisateurs
+Cette application web permet de gérer des utilisateurs avec des fonctionnalités de création d'utilisateur et de liste des utilisateurs. L'application est construite avec Flask et SQLite, et inclut des API pour gérer les utilisateurs via des requêtes GET et POST.
 
-Il s'agit d'une application web simple permettant de gérer des utilisateurs via une API. L'application prend en charge l'ajout d'utilisateurs, l'affichage d'une liste d'utilisateurs et utilise une base de données SQLite pour le stockage.
+## Fonctionnalités
+
+- Ajouter un utilisateur avec les informations suivantes : email, prénom, nom de famille et mot de passe.
+- Afficher la liste des utilisateurs dans une interface utilisateur.
+- Hachage des mots de passe avant de les stocker.
+- Connexion utilisateur avec session pour protéger les pages `/add-user` et `/users`.
 
 ## Prérequis
 
-Avant de commencer, assurez-vous d'avoir les éléments suivants installés :
-
-- Python 3.x
-- Flask
-- SQLite
+Assurez-vous d'avoir Python installé sur votre machine ainsi que `pip` pour installer les dépendances.
 
 ## Installation
 
-1. Clonez le dépôt ou téléchargez les fichiers du projet.
+1. Clonez ce dépôt ou téléchargez les fichiers.
+2. Installez les dépendances requises en exécutant la commande suivante :
 
-2. Installez les paquets Python requis en exécutant la commande suivante :
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+## Configuration
 
-   Les paquets requis sont listés dans le fichier `requirements.txt` :
-   
-   ```txt
-   click==8.0.1
-   Flask==2.0.1
-   Flask-Session==0.3.2
-   itsdangerous==2.0.1
-   Jinja2==3.0.1
-   MarkupSafe==2.0.1
-   Werkzeug==2.0.1
-   ```
+Les informations de configuration sont définies dans le fichier `config.py`.
 
-3. Configurez la base de données SQLite en exécutant le script SQL `schema.sql` pour initialiser le schéma de la base de données. Vous pouvez le faire en exécutant la commande suivante :
+## Utilisation
 
-   ```bash
-   sqlite3 database.db < schema.sql
-   ```
+1. Pour lancer l'application, exécutez le fichier `run.py` :
 
-   Cela créera les tables nécessaires dans le fichier `database.db`.
+    ```bash
+    python run.py
+    ```
 
-## Exécution de l'Application
+2. Une fois l'application lancée, vous pouvez accéder aux pages suivantes :
 
-1. Pour démarrer l'application Flask, exécutez le fichier `run.py` :
+    - `/add-user` : Page pour ajouter un utilisateur via un formulaire.
+    - `/users` : Page pour afficher la liste des utilisateurs.
+    - `/login` : Page pour la connexion (protection des routes).
 
-   ```bash
-   python run.py
-   ```
+## API
 
-   L'application sera accessible à l'adresse `http://127.0.0.1:5000`.
+L'application expose deux routes API :
 
-## Structure du Projet
+- `POST /api/users` : Ajouter un nouvel utilisateur.
+    - Body de la requête : `{ "username": "email", "first_name": "prénom", "last_name": "nom", "password": "mot de passe" }`
+    
+- `GET /api/users` : Récupérer la liste des utilisateurs au format JSON.
 
-- `run.py`: Point d'entrée principal de l'application qui démarre le serveur Flask.
-- `config.py`: Contient les paramètres de configuration pour l'application Flask, y compris la gestion des sessions.
-- `routes.py`: Définit les routes de l'API pour la gestion des utilisateurs.
-- `db.py`: Gère les connexions et les requêtes à la base de données.
-- `schema.sql`: Script SQL pour créer les tables nécessaires dans la base de données SQLite.
-- `templates/`: Contient les modèles HTML pour les pages web.
+## Base de données
 
-## Points de terminaison de l'API
+- L'application utilise SQLite pour stocker les utilisateurs dans une base de données locale `app.db`.
+- Le fichier `db.py` gère les opérations sur la base de données.
 
-L'application fournit les points de terminaison API suivants :
+## Fichiers Inclus
 
-### GET `/api/users`
-Récupère la liste des utilisateurs au format JSON.
+- `requirements.txt` : Liste des dépendances à installer pour l'application.
+- `add_user.html` : Page pour ajouter un utilisateur avec un formulaire.
+- `users.html` : Page pour afficher la liste des utilisateurs.
+- `routes.py` : Gère les routes de l'application.
+- `db.py` : Gère les opérations de base de données.
+- `run.py` : Fichier pour démarrer le serveur Flask.
 
-### POST `/api/users`
-Ajoute un nouvel utilisateur à la base de données. Le corps de la requête doit contenir les champs suivants :
+## Technologies Utilisées
 
-```json
-{
-    "username": "email@example.com",
-    "first_name": "First",
-    "last_name": "Last",
-    "password": "password"
-}
-```
+- Flask (Python)
+- SQLite
+- HTML, CSS (Bootstrap)
+- JavaScript (Fetch API)
 
-## Pages HTML
+## License
 
-### 1. Page d'ajout d'utilisateur (`add_user.html`)
-
-- Accessible via `/add-user`.
-- Cette page permet l'ajout de nouveaux utilisateurs via un formulaire.
-- Lors de la soumission du formulaire, l'utilisateur est ajouté via l'API POST `/api/users`.
-- [Voir le code source HTML](add_user.html).
-
-### 2. Page de liste des utilisateurs (`users.html`)
-
-- Accessible via `/users`.
-- Affiche un tableau listant tous les utilisateurs de la base de données.
-- Les données des utilisateurs sont récupérées via l'API GET `/api/users`.
-- [Voir le code source HTML](users.html).
-
-## Comment ça fonctionne
-
-1. **Ajout d'un utilisateur** :  
-   La page `add_user.html` contient un formulaire permettant d'ajouter de nouveaux utilisateurs. Lorsque le formulaire est soumis, les données sont envoyées au point de terminaison `/api/users` via une requête POST, et l'utilisateur est ajouté à la base de données.
-
-2. **Affichage des utilisateurs** :  
-   La page `users.html` récupère la liste des utilisateurs en utilisant le point de terminaison `/api/users` (GET) et affiche les résultats dans un tableau.
-
-## Licence
-
-Ce projet est open-source et disponible sous la licence [MIT License](LICENSE).
+Ce projet est sous licence MIT.
