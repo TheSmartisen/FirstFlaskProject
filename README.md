@@ -70,6 +70,4 @@ L'application expose deux routes API :
 - HTML, CSS (Bootstrap)
 - JavaScript (Fetch API)
 
-## License
 
-Ce projet est sous licence MIT.
