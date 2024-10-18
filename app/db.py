@@ -1,6 +1,5 @@
 import sqlite3
 from flask import current_app, g
-from werkzeug.security import generate_password_hash
 
 # Connexion à la base de données
 def get_db():
@@ -17,3 +16,14 @@ def close_db(e=None):
     db = g.pop('db', None)
     if db is not None:
         db.close()
+
+# Initialiser la base de données
+def init_db():
+    db = get_db()
+    with current_app.open_resource('schema.sql') as f:
+        db.executescript(f.read())
+
+# Commande pour initier la base de données
+def init_db_command():
+    init_db()
+    print('Base de données initialisée.')
