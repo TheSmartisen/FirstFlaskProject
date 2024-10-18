@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un Utilisateur</title>
+    <!-- Inclure Bootstrap via CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navbar Bootstrap -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Gestion Utilisateurs</a>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Accueil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/add-user">Ajouter un utilisateur</a>
+          </li>
+            <li class="nav-item">
+            <a class="nav-link" href="/logout">Déconnexion</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="my-4 text-center">Ajouter un Utilisateur</h1>
+
+        <!-- Formulaire d'ajout d'utilisateur avec validation -->
+        <form id="add-user-form">
+            <div class="form-group">
+                <label for="username">Email</label>
+                <input type="email" class="form-control" id="username" placeholder="Entrez votre email" required>
+                <div class="invalid-feedback">Veuillez entrer une adresse email valide.</div>
+            </div>
+            <div class="form-group">
+                <label for="first_name">Prénom</label>
+                <input type="text" class="form-control" id="first_name" placeholder="Prénom" required>
+                <div class="invalid-feedback">Le prénom est obligatoire.</div>
+            </div>
+            <div class="form-group">
+                <label for="last_name">Nom de famille</label>
+                <input type="text" class="form-control" id="last_name" placeholder="Nom de famille" required>
+                <div class="invalid-feedback">Le nom de famille est obligatoire.</div>
+            </div>
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" class="form-control" id="password" placeholder="Mot de passe" required>
+                <div class="invalid-feedback">Le mot de passe est obligatoire.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Ajouter l'utilisateur</button>
+        </form>
+
+        <!-- Message de succès -->
+        <div id="success-message" class="alert alert-success mt-3" style="display: none;">
+            Utilisateur ajouté avec succès !
+        </div>
+    </div>
+
+    <!-- Scripts Bootstrap et Fetch API -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Script pour soumettre le formulaire via Fetch API avec validation -->
+    <script>
+        document.getElementById('add-user-form').addEventListener('submit', function(event) {
+            // Empêche le rechargement de la page
+            event.preventDefault();
+
+            // Validation HTML5 (si tous les champs sont valides)
+            if (!this.checkValidity()) {
+                event.stopPropagation();
+                this.classList.add('was-validated');
+                return;
+            }
+
+            // Récupère les valeurs des champs du formulaire
+            const username = document.getElementById('username').value;
+            const first_name = document.getElementById('first_name').value;
+            const last_name = document.getElementById('last_name').value;
+            const password = document.getElementById('password').value;
+
+            // Prépare la requête POST
+            fetch('/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    first_name: first_name,
+                    last_name: last_name,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Affiche le message de succès
+                document.getElementById('success-message').style.display = 'block';
+
+                // Réinitialise le formulaire
+                document.getElementById('add-user-form').reset();
+                this.classList.remove('was-validated');
+            })
+            .catch(error => console.error('Erreur:', error));
+        });
+    </script>
+</body>
+</html>

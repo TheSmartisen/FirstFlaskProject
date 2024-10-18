@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Utilisateurs</title>
+    <!-- Inclure Bootstrap via CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+        <!-- Navbar Bootstrap -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Gestion Utilisateurs</a>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Accueil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/add-user">Ajouter un utilisateur</a>
+          </li>
+            <li class="nav-item">
+            <a class="nav-link" href="/logout">Déconnexion</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="my-4 text-center">Liste des Utilisateurs</h1>
+
+        <!-- Table Bootstrap -->
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Login</th>
+                    <th>Nom d'utilisateur</th>
+                </tr>
+            </thead>
+            <tbody id="user-table-body">
+                <!-- Les utilisateurs seront insérés ici par JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Inclure les scripts Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Script pour appeler l'API et afficher les utilisateurs -->
+    <script>
+        // Fonction pour récupérer les utilisateurs depuis l'API et les afficher dans le tableau
+        function fetchUsers() {
+            fetch('/api/users')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('user-table-body');
+                    tbody.innerHTML = '';  // Vide le contenu précédent
+
+                    data.forEach(user => {
+                        const row = `<tr>
+                            <td>${user.id}</td>
+                            <td>${user.username}</td>
+                            <td>${user.first_name} - ${user.last_name}</td>
+                        </tr>`;
+                        tbody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Erreur lors de la récupération des utilisateurs:', error));
+        }
+
+        // Appeler la fonction fetchUsers lors du chargement de la page
+        document.addEventListener('DOMContentLoaded', fetchUsers);
+    </script>
+</body>
+</html>
