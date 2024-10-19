@@ -39,6 +39,9 @@ Les informations de configuration sont définies dans le fichier `config.py`.
     - `/add-user` : Page pour ajouter un utilisateur via un formulaire.
     - `/users` : Page pour afficher la liste des utilisateurs.
     - `/login` : Page pour la connexion (protection des routes).
+      - Pour tester toutes les pages :
+        - **login** : patochehem@gmail.com
+        - **mot de passe** : 1234  (Oui je sais c'est pas sécu mais **TOUTES** les données sont fictives)
 
 ## API
 
