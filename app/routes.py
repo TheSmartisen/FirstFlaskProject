@@ -4,6 +4,21 @@ from .db import get_db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 def init_routes(app):
+    def check_session(html_page):
+        if not session.get('user_id'):
+            return redirect(url_for('login'))
+        return render_template(html_page)
+
+    # Route pour afficher la liste des utilisateurs dans une page HTML
+    @app.route('/')
+    def home():
+        return check_session('users.html')
+
+    # Route pour afficher le formulaire d'ajout d'utilisateur
+    @app.route('/add-user', methods=['GET'])
+    def add_user_form():
+        return check_session('add_user.html')
+
     # Route pour afficher le formulaire de connexion
     @app.route('/login', methods=['GET', 'POST'])
     def login():
@@ -29,20 +44,6 @@ def init_routes(app):
         session.clear()  # Efface toutes les données de session
         flash('Déconnecté avec succès', 'success')
         return redirect(url_for('login'))
-
-    # Route pour afficher le formulaire d'ajout d'utilisateur
-    @app.route('/add-user', methods=['GET'])
-    def add_user_form():
-        if not session.get('user_id'):
-            return redirect(url_for('login'))
-        return render_template('add_user.html')
-
-    # Route pour afficher la liste des utilisateurs dans une page HTML
-    @app.route('/')
-    def home():
-        if not session.get('user_id'):
-            return redirect(url_for('login'))
-        return render_template('users.html')
 
     # Route GET pour récupérer les utilisateurs
     @app.route('/api/users', methods=['GET'])
